@@ -1,0 +1,160 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <link rel="shortcut icon" href="img/Icon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Wanderlist</title>
+    <link rel="stylesheet" href="Bootstrap.css">
+    <link rel="stylesheet" href="Home.css">
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+</head>
+<body>
+    <br>
+<div class="container-fluid">
+	<div class="banner" style="width:100%; background-color: #4267b2; display:block;border: #29487d medium solid;border-radius: 10px;">
+	    <div class="row">
+			<div class="col">
+			 <h5>Source</h5>
+				    <select class="form-control">
+					  <option value="saab">Atlanta</option>
+					  <option value="opel">Philadelphia</option>
+					  <option value="audi">Los Angeles</option>
+					  <option value="audi">New York</option>
+					  <option value="audi">Miami</option>
+					</select>
+			</div>
+			<div class="col">
+			<h5>Destination</h5>
+				    <select id="destCity" class="form-control">
+					  <option value="saab">Atlanta</option>
+					  <option value="opel">Philadelphia</option>
+					  <option value="audi">Los Angeles</option>
+					  <option value="audi">New York</option>
+					  <option value="audi">Miami</option>
+					</select>
+			</div>
+
+			<div class="col">
+			<h5>Budget</h5>
+				    <select class="form-control">
+					  <option value="saab">High</option>
+					  <option value="opel">Medium</option>
+					  <option value="audi">Low</option>
+					</select>
+			</div>
+			<div class="col">
+					<div class="right-inner-addon">
+					    <h5>Date</h5>
+						<input type="date" class="form-control" placeholder="Dates" />
+					</div>
+			</div>
+		</div>
+	<button class="tablinks" id="download" onclick="location.href='{{url('FileManager/ready')}}'">I'm Feeling Lucky</button>
+  <button id="genButton" class="float-left submit-button">Get Itineraries</button>
+	</div>
+</div>
+</br></br>
+
+<div class="container-fluid" style="text-align: center;">
+		<div class="row">
+			<div class="col">
+				<h5>Welcome to WanderList</h5>
+				<h6>Answer to all your travelling problems</h6>
+				<object type="text/html" data="choropleth.html" width="650" height="400"></object>
+
+			</div>
+			<div class="col">
+				<h5 style="color:black;"><i id="staricon" style="color:#ffcc00" class="fas fa-star"></i> Suggested Trips</h5>
+				<div class="suggestion" style="overflow: hidden;">
+				<div class="row">
+					<div class="col">
+							<img class="img" style="width:100%; display: block; height:100%" src="img/NYC.jpg">
+					</div>
+					<div class="col">
+							<p style="text-align:left;font-size:80%;padding-top:4px"><b>
+							New York<br>Fri, July 19 – Mon, July 22<br>Frontier 1 stop 5h 54m</b></p>
+							<p style="text-align:left;font-size:80%;margin-top:-12px;margin-bottom:0px;color:green"><b>
+							GREAT VALUE $768</b></p>
+							<p style="text-align:left;font-size:80%;padding-top:-40px"><b>
+							Hotels: Grand America
+							</b></p>
+					</div>
+				</div></div>
+				<div class="suggestion" style="overflow: hidden;">
+								<div class="row">
+					<div class="col">
+							<img class="img" style="width:100%; display: block; height:100%" src="img/philly.jpg">
+					</div>
+					<div class="col">
+							<p style="text-align:left;font-size:80%;padding-top:4px"><b>
+							Philadelphia<br>Fri, July 19 – Mon, July 22<br>Frontier 1 stop 3h 32m</b></p>
+							<p style="text-align:left;font-size:80%;margin-top:-12px;margin-bottom:0px;color:green"><b>
+							GREAT VALUE $420</b></p>
+							<p style="text-align:left;font-size:80%;padding-top:-40px"><b>
+							Hotels: Grand America
+							</b></p>
+					</div>
+				</div></div>
+				<div class="suggestion" style="overflow: hidden;">
+								<div class="row">
+					<div class="col">
+							<img class="img" style="width:100%; display: block; height:100%" src="img/Miami.jpg">
+					</div>
+					<div class="col">
+							<p style="text-align:left;font-size:80%;padding-top:4px"><b>
+							Miami<br>Fri, July 19 – Mon, July 22<br>Frontier 1 stop 7h 08m</b></p>
+							<p style="text-align:left;font-size:80%;margin-top:-12px;margin-bottom:0px;color:green"><b>
+							GREAT VALUE $1224</b></p>
+							<p style="text-align:left;font-size:80%;padding-top:-40px"><b>
+							Hotels: Grand America
+							</b></p>
+					</div>
+				</div></div>
+			</div>
+			<div class="col" style="margin-top:40px;text-align:center;">
+				<div class="module" id="level1" style="background-color: #e67300;"><i id="iconn" class="fas fa-plane"></i><label>Flight</label></div>
+				<div class="module" id="level2" style="background-color: #ff9933;"><i id="iconn" class="fas fa-building"></i><label>Hotels</label></div>
+				<div class="module" id="level3" style="background-color: #d2902d;"><i id="iconn" class="fas fa-utensils"></i><label>Food</label></div>
+				<div class="module" id="level4" style="background-color: #b98b46;"><i id="iconn" class="fas fa-train"></i><label>Transport</label></div>
+				<div class="module" id="level5" style="background-color: #93836c;"><i id="iconn" class="fas fa-city"></i><label>Tourist Spots</label></div>
+			</div>
+</div>
+</div>
+
+    <div class="container-fluid">
+        </div>
+    <br>
+    <div class="container-fluid" style="background-color: black; position: fixed; left: 0; bottom: 0;">
+        <footer style="text-align: center;">
+            <br>
+            <p style="color: white;"> &copy 2019 WanderList</p>
+            <br>
+        </footer>
+    </div>
+</body>
+<script type="text/javascript">
+    document.getElementById("genButton").onclick = function () {
+
+      var e = document.getElementById("destCity");
+      var strUser = e.options[e.selectedIndex].text;
+
+      if (strUser == "Atlanta") {
+        location.href = "atl_poi.html";
+      } else if (strUser == "Los Angeles") {
+        location.href = "la_poi.html";
+      } else if (strUser == "Miami") {
+        location.href = "mia_poi.html";
+      } else if (strUser == "New York") {
+        location.href = "ny_poi.html";
+      } else {
+        location.href = "phl_poi.html";
+      }
+    };
+</script>
+
+
+</html>
