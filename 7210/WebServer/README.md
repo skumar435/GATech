@@ -1,4 +1,4 @@
-# Team2-WebServer
+# WebServer
 
 Link to webServer: http://predict2019t2.biosci.gatech.edu/
 
