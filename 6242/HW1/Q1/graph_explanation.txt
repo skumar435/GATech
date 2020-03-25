@@ -1,0 +1,1 @@
+Graph Layout used is the Fruchterman Reingold algorithm. It is a force-directed layout algorithm. The sum of the force vectors determines which direction the node would move. Also applied the filtering of nodes based on the out-degree which should be greater than 2.

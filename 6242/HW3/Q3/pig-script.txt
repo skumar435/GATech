@@ -1,0 +1,7 @@
+data = LOAD '$INPUT' USING PigStorage('\t') AS (trigram:chararray, year:int, occurrences:int, books:int);
+highocc = FILTER data BY (occurrences >= 400) AND (books >= 15);
+groups = GROUP highocc BY trigram;
+avgtg = FOREACH groups GENERATE group AS trigram, (double)SUM(highocc.occurrences)/(double)SUM(highocc.books) as avg;
+ordered = ORDER avgtg BY avg DESC, trigram;
+top20 = LIMIT ordered 20;
+STORE top20 INTO '$OUTPUT' USING PigStorage('\t');

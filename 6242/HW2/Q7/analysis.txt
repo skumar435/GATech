@@ -1,0 +1,19 @@
+1. Ease to develop
+Plotly-python: Utilizes minimal constructs, easy
+D3: Complex constructs in js, steep learning curve
+
+2. Ease to maintain visualization
+Plotly-python: Can be maintained to a fair amount using libraries
+D3: Fairly easy to maintain with all functions provided in the file
+
+3. Usability of visualization developed for end users
+Plotly-python: Interactivity is limited
+D3: Highly interactive
+
+4. Scalability of visualization to “large” datasets
+Plotly-python: Scalable to a good extent
+D3: Efficient to handle millions of records
+
+5. System requirements to run the visualization
+Plotly-python: Open source
+D3: Open source

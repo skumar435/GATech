@@ -1,0 +1,2 @@
+Q3.a.2. Budget vs. Rating combination has more spread because more Wins and Nominations mostly correspond to higher rated movies clustering together
+Q3.c. Log scales are helpful when the axis values increase exponentially as comapred to square root scale which represent a squared increase in values

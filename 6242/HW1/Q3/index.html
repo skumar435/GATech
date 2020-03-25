@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>skumar435</title>
+        <script type="text/javascript" src="d3/d3.v3.min.js"></script>
+        <style type="text/css">
+            .axis path,
+            .axis line {
+                fill: none;
+                stroke: black;
+                shape-rendering: crispEdges;
+            }
+
+            .axis text {
+                font-family: sans-serif;
+                font-size: 11px;
+            }
+        </style>
+    </head>
+    <body>
+        <script type="text/javascript">
+            var dataset = [];
+            var numDataPoints = 100;
+            var max = 250;
+            var min = 10;
+            for (var i = 0; i < numDataPoints; i++) {
+                var r1 = Math.round(Math.random() * (max - min + 1)) + min;
+                var r2 = Math.round(Math.random() * (max - min + 1)) + min;
+                dataset.push([r1, r2]);
+            }
+            var w = 500;
+            var h = 300;
+            var padding = 30;
+            var xScale = d3.scale.linear()
+                                 .domain([d3.min(dataset, function(d) { return d[0]; }), d3.max(dataset, function(d) { return d[0]; })])
+                                 .range([padding, w - padding * 2]);
+            var yScale = d3.scale.linear()
+                                 .domain([d3.min(dataset, function(d) { return d[1]; }), d3.max(dataset, function(d) { return d[1]; })])
+                                 .range([h - padding, padding]);
+            var rScale = d3.scale.linear()
+                                .domain([d3.min(dataset, function(d){return Math.min(d[0],d[1]);}), d3.max(dataset, function(d){return Math.max(d[0],d[1]);})])
+                                .rangeRound([1,5])
+                                .clamp(true);
+            var xAxis = d3.svg.axis()
+                              .scale(xScale)
+                              .orient("bottom");
+            var yAxis = d3.svg.axis()
+                              .scale(yScale)
+                              .orient("left");
+            //Create SVG element
+            var svg = d3.select("body")
+                        .append("svg")
+                        .attr("width", w)
+                        .attr("height", h);
+            svg.selectAll("circle")
+               .data(dataset)
+               .enter()
+               .append("circle")
+               .attr("cx", function(d) {
+                    return xScale(d[0]);
+               })
+               .attr("cy", function(d) {
+                    return yScale(d[1]);
+               })
+               .attr("r", function(d) {
+                    return Math.sqrt(Math.pow(rScale(d[0]),2) + Math.pow(rScale(d[1]),2));
+                })
+               .attr("fill-opacity", "0")
+               .attr("stroke", function(d) {
+                                    if (d[0] > d3.mean(dataset, function(d){return d[0];}))
+                                        return "blue";
+                                    else
+                                        return "green";
+                });
+            svg.selectAll("text")
+               .data(dataset)
+               .enter()
+               .append("text")
+               .text(function(d) {
+                    if (d[1] == d3.min(dataset, function(d){return d[1];}))
+                        return "Y-Min = " + d[1];
+               })
+               .attr("x", function(d) {
+                    return xScale(d[0]);
+               })
+               .attr("y", function(d) {
+                    return yScale(d[1]);
+               })
+               .attr("font-family", "sans-serif")
+               .attr("font-size", "12px")
+               .attr("fill", "black");
+            svg.append("text")
+                .attr("class","title")
+                .attr("x", 200)
+                .attr("y", 20)
+                .text("skumar435")
+            svg.append("g")
+                .attr("class", "axis")
+                .attr("transform", "translate(0," + (h - padding) + ")")
+                .call(xAxis);
+            svg.append("g")
+                .attr("class", "axis")
+                .attr("transform", "translate(" + padding + ",0)")
+                .call(yAxis);
+        </script>
+    </body>
+</html>

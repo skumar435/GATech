@@ -1,0 +1,8 @@
+c.i.a. 9953 rows
+c.i.b. 9953 rows, 5 columns
+c.ii. metaphone3 - 562 clusters
+c.iii. if ( value==null, "Unbranded", value )
+c.iv. if (toNumber(value) > 100, 1, 0)
+c.v. if (contains(toLowercase(value), "sale"), 1, 0)
+if (contains(toLowercase(value), "offer"), 1, 0)
+if (contains(toLowercase(value), "discount"), 1, 0)

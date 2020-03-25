@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<script src="../lib/d3.v5.min.js"></script>
+<style>
+
+		html {
+      font-size: 55%;
+    }
+
+    body {
+      margin-top: 30px;
+      font-size: 1.4rem;
+      font-family: 'Arial', sans-serif;
+      font-weight: 400;
+      fill: #696969;
+      text-align: center;
+    }
+
+    .areaLabel, .crimeLabel {
+		    font-size: 1.6rem;
+		    fill: #AAAAAA;
+		    font-weight: 300;
+		}
+
+</style>
+<body>
+	<h2>Visualizing Crimes in New York City</h2>
+	<div>
+		<h3 style="display: inline">Year</h3>
+		<div style="display: inline" id="yearDropdown"></div>
+	</div>
+	<div id="heatmap"></div>
+<script>
+
+d3.csv("./heatmap.csv").then(function(data) {
+	data.forEach(function(d) {
+		d.Bronx = +d.Bronx;
+		d.Brooklyn = +d.Brooklyn;
+		d.Manhattan = +d.Manhattan;
+		d.Queens = +d.Queens;
+		d["Staten Island"] = +d["Staten Island"];
+		d.Year = +d.Year;
+	});
+	var nest = d3.nest()
+					    	.key(function(d) { return d.Year; })
+					    	.entries(data);
+	crimes = [];
+	yIndex = 0;
+	nest[yIndex].values.forEach(function(d) {
+		crimes.push(d["Crime Type"]);
+	});
+	crimes.sort();
+
+  var areas = ["Bronx", "Brooklyn", "Manhattan", "Queens", "Staten Island"];
+
+  var margin = {top:40, right:50, bottom:70, left:100};
+
+  var w = 400,
+  		gridSize = Math.floor(w / crimes.length),
+			h = gridSize * (areas.length + 2);
+
+  // svg container
+  var svg = d3.select("#heatmap")
+					  	.append("svg")
+					  	.attr("width", w + margin.top + margin.bottom*2)
+					  	.attr("height", h + margin.left + margin.right)
+					  	.append("g")
+					  	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  // linear colour scale
+  var colours = d3.scaleQuantize()
+							  	.range(["#fff5f0", "#fee0d2", "#fcbba1", "#fc9272", "#fb6a4a", "#ef3b2c", "#cb181d", "#a50f15", "#67000d"]);
+
+  var areaLabels = svg.selectAll(".areaLabel")
+									  	.data(areas)
+									  	.enter()
+									  	.append("text")
+									  	.text(function(d) { return d; })
+									  	.attr("x", 0)
+									  	.attr("y", function(d, i) { return i * gridSize; })
+									  	.style("text-anchor", "end")
+											.attr("transform", "translate(-6," + gridSize / 1.5 + ")")
+
+  var crimeLabels = svg.selectAll(".crimeLabel")
+									    .data(crimes)
+									    .enter()
+									    .append("text")
+									    .text(function(d) { return d; })
+									    .attr("x", function(d, i) { return i * gridSize; })
+									    .attr("y", h - margin.top*2)
+									    .style("text-anchor", "middle")
+									    .attr("transform", function(d, i) {
+												return "rotate(-90, " + (i*gridSize + 20) + ", " + (h - margin.top*2.5) + ")"});
+
+	svg.append("text")
+			.attr("class", "label")
+			.attr("x", 0)
+			.attr("y", -5)
+			.style("text-anchor", "end")
+			.style("font-weight", "bold")
+			.text("Borough");
+
+	svg.append("text")
+			.attr("class", "label")
+			.attr("x", w + 10)
+			.attr("y", h - margin.top*2.5)
+			.style("text-anchor", "start")
+			.style("font-weight", "bold")
+			.text("Crime Type");
+
+	svg.append("text")
+			.attr("class", "label")
+			.attr("x", 0)
+			.attr("y", h - 20)
+			.style("text-anchor", "start")
+			.style("font-weight", "bold")
+			.text("No. of Crimes");
+
+	var legend = svg.selectAll(".legend")
+									.data(colours.range())
+									.enter().append("g")
+              		.attr("class", "legend");
+
+  legend.append("rect")
+		    .attr("x", function(d, i) { return (gridSize-20)*i; })
+		    .attr("y", h-15)
+		    .attr("width", gridSize - 20)
+		    .attr("height", gridSize / 2)
+		    .style("fill", function(d, i) { return colours.range()[i]; });
+
+	var xScale = function(d) {
+		if (d.Crime == "Assault") {
+			return 0;
+		}
+		else if (d.Crime == "Burglary") {
+			return 1 * gridSize;
+		}
+		else if (d.Crime == "Housing") {
+			return 2 * gridSize;
+		}
+		else if (d.Crime == "Murder") {
+			return 3 * gridSize;
+		}
+		else if (d.Crime == "Robbery") {
+			return 4 * gridSize;
+		}
+		else {
+			return 5 * gridSize;
+		}
+	}
+
+	var yScale = function(d) {
+		if (d.Area == "Bronx") {
+			return 0;
+		}
+		else if (d.Area == "Brooklyn") {
+			return 1 * gridSize;
+		}
+		else if (d.Area == "Manhattan") {
+			return 2 * gridSize;
+		}
+		else if (d.Area == "Queens") {
+			return 3 * gridSize;
+		}
+		else {
+			return 4 * gridSize;
+		}
+	}
+
+  // array of locations in the data
+  var years = nest.map(function(d) { return d.key; });
+
+  // create location dropdown menu
+  var yearMenu = d3.select("#yearDropdown")
+				    				.append("select")
+							      .attr("id", "yearnMenu")
+							      .selectAll("option")
+						        .data(years)
+						        .enter()
+						        .append("option")
+						        .attr("value", function(d, i) { return i; })
+						        .text(function(d) { return d; });
+
+  // function to create the initial heatmap
+  var drawHeatmap = function(year) {
+
+    // filter the data to return object of location of interest
+    var selectYear = nest.find(function(d) {
+      return d.key == year;
+    });
+		var transData = [];
+		selectYear.values.forEach(function(d) {
+			transData.push({"Crime": d["Crime Type"], "Area": "Bronx", "Value": d.Bronx});
+			transData.push({"Crime": d["Crime Type"], "Area": "Brooklyn", "Value": d.Brooklyn});
+			transData.push({"Crime": d["Crime Type"], "Area": "Manhattan", "Value": d.Manhattan});
+			transData.push({"Crime": d["Crime Type"], "Area": "Queens", "Value": d.Queens});
+			transData.push({"Crime": d["Crime Type"], "Area": "Staten_Island", "Value": d["Staten Island"]});
+		});
+		valueDomain = [];
+		nest[yIndex].values.forEach(function(d) {
+			valueDomain.push(d.Bronx);
+			valueDomain.push(d.Brooklyn);
+			valueDomain.push(d.Manhattan);
+			valueDomain.push(d.Queens);
+			valueDomain.push(d.Bronx);
+			valueDomain.push(d["Staten Island"]);
+		});
+		colours.domain([d3.min(valueDomain), d3.max(valueDomain)]);
+		legend.append("text")
+			    .text(function(d) { return Math.round(colours.invertExtent(d)[0]); })
+			    .attr("x", function(d, i) { return (gridSize-20)*i; })
+			    .attr("y", h + gridSize/2);
+    var heatmap = svg.selectAll(".arCr")
+							        .data(transData)
+							        .enter()
+							        .append("rect")
+											.attr("class", "hp")
+											.attr("rx", 5)
+											.attr("ry", 5)
+							        .attr("x", function(d) { return xScale(d); })
+							        .attr("y", function(d) { return yScale(d); })
+							        .attr("width", gridSize)
+							        .attr("height", gridSize)
+							        .style("stroke", "white")
+							        .style("stroke-opacity", 0.6)
+							        .style("fill", function(d) { return colours(d.Value); });
+  }
+  drawHeatmap(years[yIndex]);
+
+  var updateHeatmap = function(year) {
+    // filter data to return object of location of interest
+    var selectYear = nest.find(function(d) {
+      return d.key == year;
+    });
+		var transData = [];
+		selectYear.values.forEach(function(d) {
+			transData.push({"Crime": d["Crime Type"], "Area": "Bronx", "Value": d.Bronx});
+			transData.push({"Crime": d["Crime Type"], "Area": "Brooklyn", "Value": d.Brooklyn});
+			transData.push({"Crime": d["Crime Type"], "Area": "Manhattan", "Value": d.Manhattan});
+			transData.push({"Crime": d["Crime Type"], "Area": "Queens", "Value": d.Queens});
+			transData.push({"Crime": d["Crime Type"], "Area": "Staten_Island", "Value": d["Staten Island"]});
+		});
+		valueDomain = [];
+		nest[yIndex].values.forEach(function(d) {
+			valueDomain.push(d.Bronx);
+			valueDomain.push(d.Brooklyn);
+			valueDomain.push(d.Manhattan);
+			valueDomain.push(d.Queens);
+			valueDomain.push(d.Bronx);
+			valueDomain.push(d["Staten Island"]);
+		});
+		colours.domain([d3.min(valueDomain), d3.max(valueDomain)]);
+		var leg = svg.selectAll(".legend")
+									.selectAll("text")
+									.transition()
+									.duration(500)
+									.text(function(d) { return Math.round(colours.invertExtent(d)[0]); });
+    // update the data and redraw heatmap
+    var heatmap = svg.selectAll(".hp")
+								      .data(transData)
+								      .transition()
+							        .duration(500)
+							        .style("fill", function(d) { return colours(d.Value); });
+  }
+
+  // run update function when dropdown selection changes
+  yearMenu.on("click", function() {
+    // find which year was selected from the dropdown
+    var selectedYear = d3.select("select")
+										      .property("value");
+    yIndex = +selectedYear;
+    // run update function with selected location
+    updateHeatmap(years[yIndex]);
+  });
+});
+
+</script>
+</body>
+</html>
