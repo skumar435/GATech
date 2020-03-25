@@ -1,0 +1,41 @@
+;   MEGA-CC (Molecular Evolutionary Genetics Analysis Compute Core)
+;
+;   Suggested Citation for MEGA-CC 10:
+;
+;   Kumar S, Stecher G, Li M, Knyaz C, Tamura K
+;   MEGA X: Molecular Evolutionary Genetics Analysis across computing platforms
+;   Molecular Biology and Evolution (2018) 35:1547-1549
+;
+;   Kumar S, Stecher G, Peterson D, and Tamura K
+;   MEGA-CC: Computing Core of Molecular Evolutionary Genetics
+;   Analysis Program for Automated and Iterative Data Analysis.
+;   Bioinformatics (2012) 28:2685-2686 (Epub 2012 Aug 24)
+
+[General Info]
+
+	Data Type                               = distance matrix
+	No. of Taxa                             =       50
+	Data File                               = '/projects/VirtualHost/predictb/tools/Comparative_Genomics/comp_gen_data/in_file.meg'
+	Settings File                           = '/projects/VirtualHost/predictb/tools/Comparative_Genomics/comp_gen_data/infer_NJ_distances.mao'
+	Command Line                            = /projects/VirtualHost/predictb/tools/Comparative_Genomics/megacc -a /projects/VirtualHost/predictb/tools/Comparative_Genomics/comp_gen_data/infer_NJ_distances.mao -d /projects/VirtualHost/predictb/tools/Comparative_Genomics/comp_gen_data/in_file.meg -o sample
+
+[Analysis Settings]
+
+	Analysis                                = Phylogeny Reconstruction
+	Scope                                   = All Selected Taxa
+	Statistical Method                      = Neighbor-joining
+	Number of Threads                       = 1
+	Has Time Limit                          = False
+	Maximum Execution Time                  = -1
+	datatype                                = snDistance
+	MissingBaseSymbol                       = ?
+	IdenticalBaseSymbol                     = .
+	GapSymbol                               = -
+
+[Analysis Statistics]
+
+	Start Time                              = 04/23/2019 01:01:58 AM
+	End Time                                = 04/23/2019 01:01:59 AM
+	Execution Time                          =    0.544 (seconds)
+	Peak Memory Used(Working Set)           = Not available
+	Sum of branch lengths                   =    4.247
