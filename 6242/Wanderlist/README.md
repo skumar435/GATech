@@ -3,8 +3,8 @@
 Wanderlist is a travel itinerary predictor capable of providing meaningful travel itinerary\
 suggestions to users based on minimal input from users - primarily their budget and\
 dates, and not provide every detail of their planned travel\
-\
-# Approaches\
+
+# Approaches
 ● Input dates and budget are taken and
 returned are a combination of possible hotels,
 restaurants and flights that a traveller could
@@ -18,8 +18,8 @@ optimised for a minimal budget.\
 for planning a tour that combines flights,
 hotels and restaurants data to provide an
 itinerary thats optimised to be within a budget specified by the user.\
-\
-# Data and Tools used\
+
+# Data and Tools used
 ● We downloaded the data corresponding to hotels and restaurant using API for popular websites like
 Tripadvisor and Yelp.\
 ● We get flight information using API called skyscanner which gives the minimum prices and carrier Ids\
